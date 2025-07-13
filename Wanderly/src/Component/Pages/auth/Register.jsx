@@ -1,6 +1,27 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Register(){
+  const[email,setEmail]=useState("abc@gmail.com")
+  const[password, setPassword]=useState("")
+  const[name,setName]=useState("")
+  const changename=(e)=>{
+    setName(e.target.value) 
+  }
+  let nav=useNavigate()
+  const handleform=(e)=>{
+    e.preventDefault()
+    if(name=="admin" && password=="2025"&& email=="admin@gmail.com"){
+      toast.success("Registered Successfully")
+      nav("/home")
+    }
+    else{
+      toast.error("Invalid Credentials")
+    }
+  }
+
+
     return(
         <>
          {/* Contact Start */}
@@ -16,7 +37,7 @@ export default function Register(){
         
         
         <div className="col-lg-12 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
-          <form>
+          <form onSubmit={handleform}>
             <div className="row g-3">
               <div className="col-md-6">
                 <div className="form-floating">
@@ -25,6 +46,8 @@ export default function Register(){
                     className="form-control"
                     id="name"
                     placeholder="Your Name"
+                    onChange={changename}
+                    value={name}
                   />
                   <label htmlFor="name">Your Name</label>
                 </div>
@@ -36,6 +59,11 @@ export default function Register(){
                     className="form-control"
                     id="email"
                     placeholder="Your Email"
+                    value={email}
+                    onChange={(e)=>{
+                      setEmail(e.target.value)
+                    }}
+
                   />
                   <label htmlFor="email">Your Email</label>
                 </div>
@@ -47,13 +75,18 @@ export default function Register(){
                     className="form-control"
                     id="subject"
                     placeholder="Subject"
+                    value={password}
+                    onChange={(e)=>{
+                      setPassword(e.target.value)
+
+                    }}
                   />
                   <label htmlFor="subject">Password</label>
                 </div>
               </div>
              
               <div className="col-12">
-                <button className="btn btn-primary w-100 py-3" type="submit">
+                <button className="btn btn-primary w-100 py-3" type="submit" >
                   Submit
                 </button>
               </div>

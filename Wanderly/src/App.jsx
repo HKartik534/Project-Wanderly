@@ -15,6 +15,7 @@ import Layout from './Component/Pages/Layout/Layout'
 import Error from './Component/Pages/Pages/Error'
 import Register from './Component/Pages/auth/Register'
 import Sign_up from './Component/Pages/auth/Sign_up'
+import { ToastContainer } from 'react-toastify'
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
               <Route path="/*" element={<Error></Error>}/>
             </Routes>
          </BrowserRouter> 
+         <ToastContainer/>
          
     </>
   )
