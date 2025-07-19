@@ -1,114 +1,167 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { useState } from "react"
+import { auth, db } from "../../../Firebase"
+import { Link, useNavigate } from "react-router-dom"
+import { doc, setDoc, Timestamp } from "firebase/firestore"
+import { toast } from "react-toastify"
+
 
 export default function Register(){
-  const[email,setEmail]=useState("abc@gmail.com")
-  const[password, setPassword]=useState("")
-  const[name,setName]=useState("")
-  const changename=(e)=>{
-    setName(e.target.value) 
-  }
+  const [name, setName]=useState("")
+  const [email,setEmail]=useState("abc@gmail.com")
+  const[password,setPassword]=useState("")
   let nav=useNavigate()
-  const handleform=(e)=>{
+  let handleForm=(e)=>{
     e.preventDefault()
-    if(name=="admin" && password=="2025"&& email=="admin@gmail.com"){
-      toast.success("Registered Successfully")
-      nav("/home")
-    }
-    else{
-      toast.error("Invalid Credentials")
-    }
+    createUserWithEmailAndPassword(auth,email,password)
+    .then((userCred)=>{
+      // console.log(userCred.user.uid);
+      let userId=userCred.user.uid
+      saveData(userId)
+    })
+    .catch((error)=>{
+      console.log(error.message);
+    })
   }
+  const saveData= async(userId)=>{
+    try {let data={
+    name:name,
+    email:email,
+    userType:3,
+    userId:userId,
+    status:true,
+    createdAt:Timestamp.now()
+  }
+  await setDoc(doc(db,"users",userId),data)
+  toast.success("Registered successfully")
+  nav("/home")  
+    } catch (error) {
+      toast.error(error.message)
+      
+    } 
+}
 
 
+    
     return(
         <>
-         {/* Contact Start */}
-  <div className="container-xxl py-5">
-    <div className="container">
-      <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-        <h6 className="section-title bg-white text-center text-primary px-3">
-          Register
-        </h6>
-        <h1 className="mb-5">Your Details:</h1>
-      </div>
-      <div className="row g-4 justify content:center">
-        
-        
-        <div className="col-lg-12 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
-          <form onSubmit={handleform}>
-            <div className="row g-3">
-              <div className="col-md-6">
-                <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="name"
-                    placeholder="Your Name"
-                    onChange={changename}
-                    value={name}
-                  />
-                  <label htmlFor="name">Your Name</label>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form-floating">
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    placeholder="Your Email"
-                    value={email}
-                    onChange={(e)=>{
-                      setEmail(e.target.value)
-                    }}
+         <div className="site-wrap">
+            <div className="site-mobile-menu site-navbar-target">
+            <div className="site-mobile-menu-body" />
+        </div>
 
-                  />
-                  <label htmlFor="email">Your Email</label>
-                </div>
-              </div>
-              <div className="col-12">
-                <div className="form-floating">
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="subject"
-                    placeholder="Subject"
-                    value={password}
-                    onChange={(e)=>{
-                      setPassword(e.target.value)
+       
 
-                    }}
-                  />
-                  <label htmlFor="subject">Password</label>
+        <section className="site-section">
+          <div className="container">
+            <div className="row align-items-center">
+              {/* Left Side: Form */}
+              <div className="col-lg-6 mb-5">
+                <h2 className="mb-4">Sign Up To Wanderly</h2>
+                <form
+                  onSubmit={handleForm}
+                  className="p-4"
+                  style={{
+                    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.12)",
+                    borderRadius: "12px",
+                    backgroundColor: "#ffffff",
+                    transition: "transform 0.3s ease",
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                >
+                  <div className="form-group mb-3">
+                    <label className="text-black">Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Name"
+                      required
+                     value={name}
+                     onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group mb-3">
+                    <label className="text-black">Email</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Email address"
+                      required
+                      value={email}
+                      onChange={(e)=>{
+                        setEmail(e.target.value)
+
+                      }}
+                    />
+                  </div>
+                  <div className="form-group mb-3">
+                    <label className="text-black">Password</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group mb-4">
+                    <label className="text-black">Re-Type Password</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Re-type Password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="submit"
+                      value="Sign Up"
+                      className="btn px-4 btn-primary text-white"
+                    />
+                  </div>
+                  
+                   
+                </form>
+
+                <div className="text-center mt-3">
+                  <p>
+                    Already have an account?{" "}
+                    <Link to="/signup" className="text-primary">
+                      Log In
+                    </Link>
+                  </p>
                 </div>
               </div>
-             
-              <div className="col-12">
-                <button className="btn btn-primary w-100 py-3" type="submit" >
-                  Submit
-                </button>
+
+              {/* Right Side: Image + Text */}
+              <div className="col-lg-6 text-center">
+                <img
+                  src="/asset/img/destination-1.jpg"
+                  alt="Register Illustration"
+                  style={{
+                    maxWidth: "600px",
+                    width: "100%",
+                    height: "auto",
+                    borderRadius: "12px",
+                    margin: "0 auto",
+                  }}
+                />
+                <p className="mt-0" style={{ fontSize: "1.1rem", color: "#555" }}>
+                  <strong>Explore thousands of places</strong><br />
+                  Start your journey with Wanderly today!
+                </p>
               </div>
             </div>
-          </form>
-        </div>
+          </div>
+        </section>
+
+        {/* <Footer /> */}
       </div>
-    </div>
-  </div>
-  {/* Contact End */}
-  
-  {/* Back to Top */}
-  <a href="#" className="btn btn-lg btn-primary btn-lg-square back-to-top">
-    <i className="bi bi-arrow-up" />
-  </a>
-  <Link to="/signup">
-<div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-   <h6 className="section-title bg-white text-center text-primary px-3">
-          Sign up to an existing account
-        </h6>
-        </div>
-        </Link>
         </>
     )
 }

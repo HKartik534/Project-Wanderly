@@ -13,9 +13,12 @@ import Header from './Component/Pages/Layout/Header'
 import Footer from './Component/Pages/Layout/Footer'
 import Layout from './Component/Pages/Layout/Layout'
 import Error from './Component/Pages/Pages/Error'
-import Register from './Component/Pages/auth/Register'
-import Sign_up from './Component/Pages/auth/Sign_up'
+
+
 import { ToastContainer } from 'react-toastify'
+import Signup from './Component/Pages/auth/Signup'
+
+import Register from './Component/Pages/auth/Register'
 
 
 function App() {
@@ -23,7 +26,7 @@ function App() {
 
   return (
     <>
-          <BrowserRouter>
+           <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Layout></Layout>}>
                 <Route path="about" element={<About></About>}/>
@@ -35,14 +38,20 @@ function App() {
                 <Route path="services" element={<Services></Services>}/>
                 <Route path="team" element={<Team></Team>}/>
                 <Route path="testimonial" element={<Testimonial></Testimonial>}/>
-               <Route path="/register" element={<Register></Register>}/>
-              <Route path="/signup" element={<Sign_up></Sign_up>}/>
+               
+               <Route path="/signup" element={<Signup></Signup>}/>
+               <Route path="register" element={<Register></Register>}/>
+               
+               
                 
             </Route>
               <Route path="/*" element={<Error></Error>}/>
             </Routes>
          </BrowserRouter> 
-         <ToastContainer/>
+         <ToastContainer/> 
+         
+         
+         
          
     </>
   )

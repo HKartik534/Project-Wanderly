@@ -3,7 +3,7 @@ import Header from "../Layout/Header"
 function Services(){
     return(
         <>
-        <Header></Header>
+        
  
  
   {/* Service Start */}
