@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { auth } from "../../../Firebase";
+import { auth, db } from "../../../Firebase";
 import {  GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 
 export default function Signup(){
     
-    const[email, setEmail]=useState("janki@gmail.com")
+    const[email, setEmail]=useState("")
     const[password,setPassword]=useState("")
     let nav= useNavigate()
     let signInGoogle=()=>{
@@ -24,8 +25,11 @@ export default function Signup(){
         signInWithEmailAndPassword(auth,email,password)
         .then((userCred)=>{
             console.log(userCred.user.uid);
-            toast.success("Login Successful")
+            // toast.success("Login Successful")
             nav("/home")
+            // console.log();
+            
+            getUserData(userCred.user.uid)
 
             
         })
@@ -35,8 +39,25 @@ export default function Signup(){
         })
     }
 
-   
-
+     const getUserData=async (userId)=>{
+        console.log("hlo",userId);
+        
+        let userDoc=await getDoc(doc(db, "users", userId))
+        // console.log(userDoc.data())
+        let userData=userDoc.data()
+        sessionStorage.setItem("name", userData.name)
+        sessionStorage.setItem("email", userData.email)
+        sessionStorage.setItem("userType", userData.userType)
+         sessionStorage.setItem("userId", userId)
+          sessionStorage.setItem("isLogin", true)
+          toast.success("Login successfully")
+            if(userData?.userType==1){
+                nav("/admin")
+        }
+        else{
+                nav("/home")
+        }    
+      }
     return(
         <>
          <div className="site-wrap">

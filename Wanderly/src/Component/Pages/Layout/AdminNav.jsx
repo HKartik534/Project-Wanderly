@@ -1,8 +1,9 @@
-import { Link, useNavigate } from "react-router-dom"
-import Swal from "sweetalert2"
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-export default function Header(){
-  let isLogin= sessionStorage.getItem("isLogin")
+export default function AdminNav(){
+    let isLogin= sessionStorage.getItem("isLogin")
     let name=sessionStorage.getItem("name")
     const nav=useNavigate()
     const logout=()=>{
@@ -26,12 +27,10 @@ export default function Header(){
         }
         });
     }
- 
-  
+
     return(
         <>
-         {/* Topbar Start */}
-  <div className="container-fluid bg-dark px-5 d-none d-lg-block">
+        <div className="container-fluid bg-dark px-5 d-none d-lg-block">
     <div className="row gx-0">
       <div className="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
         <div
@@ -83,14 +82,14 @@ export default function Header(){
       </button>
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <div className="navbar-nav ms-auto py-0">
-          <Link to="/home" className="nav-item nav-link">
+          <Link to="/admin" className="nav-item nav-link">
             Home
           </Link>
-           <Link to="/about" className="nav-item nav-link">
-            About
+           <Link to="/admin/destination" className="nav-item nav-link">
+            Destination
           </Link> 
-          <Link to="/services" className="nav-item nav-link">
-            Services
+          <Link to="/admin/managedestination" className="nav-item nav-link">
+            ManageDestination
           </Link>
           <Link to="/package" className="nav-item nav-link">
             Packages
@@ -124,7 +123,7 @@ export default function Header(){
           <Link to="/contact" className="nav-item nav-link">
             Contact
           </Link>
-           {
+          {
               isLogin?
               <Link to="#" onClick={logout} className="nav-link">
               Logout {name}
@@ -135,7 +134,7 @@ export default function Header(){
             </Link>
             }
         </div>
-         
+       
       </div>
     </nav>
     <div className="container-fluid bg-primary py-5 mb-5 hero-header">
@@ -143,8 +142,7 @@ export default function Header(){
     </div>
   </div>
   {/* Navbar & Hero End */}
-  
-  </>
-
+        
+        </>
     )
 }

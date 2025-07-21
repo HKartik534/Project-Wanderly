@@ -19,6 +19,9 @@ import { ToastContainer } from 'react-toastify'
 import Signup from './Component/Pages/auth/Signup'
 
 import Register from './Component/Pages/auth/Register'
+import AdminLayout from './Component/Pages/Layout/AdminLayout'
+import AddDestinations from './Component/admin/destinations/AddDestinations'
+import ManageDestination from './Component/admin/ManageDestination'
 
 
 function App() {
@@ -44,6 +47,11 @@ function App() {
                
                
                 
+            </Route>
+
+            <Route path="/admin" element={<AdminLayout></AdminLayout>}>
+            <Route path="destination" element={<AddDestinations></AddDestinations>}/>
+            <Route path="managedestination" element={<ManageDestination></ManageDestination>}/>
             </Route>
               <Route path="/*" element={<Error></Error>}/>
             </Routes>

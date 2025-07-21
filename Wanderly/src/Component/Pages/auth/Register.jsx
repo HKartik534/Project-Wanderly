@@ -2,13 +2,11 @@ import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useState } from "react"
 import { auth, db } from "../../../Firebase"
 import { Link, useNavigate } from "react-router-dom"
-import { doc, setDoc, Timestamp } from "firebase/firestore"
+import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore"
 import { toast } from "react-toastify"
-
-
 export default function Register(){
   const [name, setName]=useState("")
-  const [email,setEmail]=useState("abc@gmail.com")
+  const [email,setEmail]=useState("")
   const[password,setPassword]=useState("")
   let nav=useNavigate()
   let handleForm=(e)=>{
@@ -34,13 +32,30 @@ export default function Register(){
   }
   await setDoc(doc(db,"users",userId),data)
   toast.success("Registered successfully")
-  nav("/home")  
-    } catch (error) {
-      toast.error(error.message)
-      
-    } 
+  nav("/home") 
+  getUserData(userId)
+    }  
+  catch (error) {
+      toast.error(error.message)  
+  } 
 }
-
+const getUserData=async (userId)=>{
+      let userDoc=await getDoc(doc(db, "users", userId))
+      console.log(userDoc.data())
+      let userData=userDoc.data()
+      sessionStorage.setItem("name", userData?.name)
+      sessionStorage.setItem("email", userData?.email)
+      sessionStorage.setItem("userType", userData?.userType)
+      sessionStorage.setItem("userId", userId)
+      sessionStorage.setItem("isLogin", true)
+      toast.success("Login successfully")
+      if(userData.userType==1){
+            nav("/admin")
+          }else{
+            nav("/home")
+          }
+      
+    }
 
     
     return(
